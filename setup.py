@@ -9,7 +9,7 @@ setup(
         "google-generativeai",
         "requests",
         "b2sdk",
-        "pinecone-client",
+        "pinecone",
         "aiohttp",
         "beautifulsoup4",
         "tenacity"
