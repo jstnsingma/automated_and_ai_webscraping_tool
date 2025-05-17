@@ -2,6 +2,7 @@ from dagster import op, DynamicOut, DynamicOutput, Out, job, graph, asset
 from src.scraper.registry import SCRAPER_REGISTRY
 from src.processor.article_processor import start_scraper, process_articles
 from src.processor.database_processor import process_archiving, save_to_db
+import aiohttp
 
 @asset
 async def extract_bbc(context):
@@ -15,6 +16,22 @@ async def extract_bbc(context):
 
     context.log.info(f"bbc data: {data}")
     context.log.info("Instantiating extract_npr finished")
+
+
+    url = "https://httpbin.org/get"
+    headers = {
+        "User-Agent": "Mozilla/5.0"
+    }
+
+    try:
+        async with aiohttp.ClientSession(headers=headers) as session:
+            async with session.get(url) as response:
+                context.log.info(f"Status: {response.status}")
+                text = await response.text()
+                context.log.info(f"Response snippet: {text[:200]}")  # Print first 200 chars
+    except Exception as e:
+        context.log.info(f"Request failed: {e}")
+        raise
 
     return data
 
@@ -30,6 +47,21 @@ async def extract_npr(context):
 
     context.log.info(f"npr data: {data}")
     context.log.info("Instantiating extract_npr finished")
+
+    url = "https://httpbin.org/get"
+    headers = {
+        "User-Agent": "Mozilla/5.0"
+    }
+
+    try:
+        async with aiohttp.ClientSession(headers=headers) as session:
+            async with session.get(url) as response:
+                context.log.info(f"Status: {response.status}")
+                text = await response.text()
+                context.log.info(f"Response snippet: {text[:200]}")  # Print first 200 chars
+    except Exception as e:
+        context.log.info(f"Request failed: {e}")
+        raise
 
     return data
 
