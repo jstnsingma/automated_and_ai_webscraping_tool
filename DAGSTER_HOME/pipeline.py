@@ -1,9 +1,9 @@
-from dagster import op, DynamicOut, DynamicOutput, Out, job, graph
+from dagster import op, DynamicOut, DynamicOutput, Out, job, graph, asset
 from src.scraper.registry import SCRAPER_REGISTRY
 from src.processor.article_processor import start_scraper, process_articles
 from src.processor.database_processor import process_archiving, save_to_db
 
-@op(out=DynamicOut())
+@asset
 async def extract_bbc(context):
     context.log.info("Instantiating extract_bbc")
     name = SCRAPER_REGISTRY["bbc"]["name"]
@@ -15,9 +15,10 @@ async def extract_bbc(context):
 
     context.log.info(f"bbc data: {data}")
     context.log.info("Instantiating extract_npr finished")
-    yield DynamicOutput(data, mapping_key=name)
 
-@op(out=DynamicOut())
+    return data
+
+@asset
 async def extract_npr(context):
     context.log.info("Instantiating extract_npr")
     name = SCRAPER_REGISTRY["npr"]["name"]
@@ -29,14 +30,15 @@ async def extract_npr(context):
 
     context.log.info(f"npr data: {data}")
     context.log.info("Instantiating extract_npr finished")
-    yield DynamicOutput(data, mapping_key=name)
 
-@op(out=Out())
+    return data
+
+@op
 def archive_article(article_data: dict):
     process_archiving(article_data)
     return article_data
 
-@op(out=Out())
+@op
 def summarize_and_categorize(article_data):
     return process_articles(article_data['data'])
 
@@ -46,11 +48,17 @@ def store_articles(article: list[dict]):
 
 @graph
 def web_scraper():
-    extract_bbc().map(archive_article).map(summarize_and_categorize).map(store_articles)
+    data = extract_bbc()
+    archive_article(data)
+    cleaned_data = summarize_and_categorize(data)
+    store_articles(cleaned_data)
 
 @graph
 def web_scraper2():
-    extract_npr().map(archive_article).map(summarize_and_categorize).map(store_articles)
+    data = extract_npr()
+    archive_article(data)
+    cleaned_data = summarize_and_categorize(data)
+    store_articles(cleaned_data)
 
 @job
 def run_all_scrapers():

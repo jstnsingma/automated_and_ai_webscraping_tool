@@ -1,5 +1,5 @@
 from dagster import Definitions, ScheduleDefinition
-from DAGSTER_HOME.pipeline import run_all_scrapers  
+from DAGSTER_HOME.pipeline import run_all_scrapers, extract_bbc, extract_npr
 
 daily_schedule = ScheduleDefinition(
     job=run_all_scrapers,
@@ -8,6 +8,7 @@ daily_schedule = ScheduleDefinition(
 )
 
 defs = Definitions(
+    assets=[extract_bbc, extract_npr],
     jobs=[run_all_scrapers],
     schedules=[daily_schedule]
 )
