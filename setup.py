@@ -12,7 +12,8 @@ setup(
         "pinecone",
         "aiohttp",
         "beautifulsoup4",
-        "tenacity"
+        "tenacity",
+        "lxml"
     ],
     extras_require={"dev": ["dagster-webserver", "pytest"]},
 )

@@ -13,7 +13,8 @@ dependencies = [
     "pinecone",
     "aiohttp",
     "beautifulsoup4",
-    "tenacity"
+    "tenacity",
+    "lxml"
 ]
 
 [project.optional-dependencies]

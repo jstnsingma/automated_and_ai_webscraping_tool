@@ -7,3 +7,4 @@ pinecone
 aiohttp
 beautifulsoup4
 tenacity
+lxml
