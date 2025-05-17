@@ -19,17 +19,21 @@ def save_to_db(article: list[dict]):
     pc_helper = PineconeHelper()
     pc_helper.upsert_vectors(article)
 
-async def deduplicate_data(datas: list[dict]) -> list[dict]:
+async def deduplicate_data(datas: list[dict], context) -> list[dict]:
     """ Filters the data that are already in the DB """
+    try: 
+        logger.info(f"Processing deduplication")
+        pc_helper = PineconeHelper()
 
-    logger.info(f"Processing deduplication")
-    pc_helper = PineconeHelper()
+        id_data_pairs = [(content_hash(data['url']), data) for data in datas]
+        ids = [pair[0] for pair in id_data_pairs]
+        result = pc_helper.fetch_vectors(ids)
 
-    id_data_pairs = [(content_hash(data['url']), data) for data in datas]
-    ids = [pair[0] for pair in id_data_pairs]
-    result = pc_helper.fetch_vectors(ids)
+        existing_ids = [data['id'] for data in result.values()]
+        new_data = [data for (hash_id, data) in id_data_pairs if hash_id not in existing_ids]
 
-    existing_ids = [data['id'] for data in result.values()]
-    new_data = [data for (hash_id, data) in id_data_pairs if hash_id not in existing_ids]
-
-    return new_data
+        return new_data
+    
+    except Exception as e:
+            logger.exception(f"Error deduplicate_data: {e}")
+            context.log.error(f"Error deduplicate_data: {e}")
