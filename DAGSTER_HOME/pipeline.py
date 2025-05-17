@@ -18,7 +18,7 @@ async def extract_bbc(context):
     context.log.info("Instantiating extract_npr finished")
 
 
-    url = "https://httpbin.org/get"
+    url = "https://www.npr.org/get/1001/render/partial/next?start=1&count=50"
     headers = {
         "User-Agent": "Mozilla/5.0"
     }
@@ -48,7 +48,7 @@ async def extract_npr(context):
     context.log.info(f"npr data: {data}")
     context.log.info("Instantiating extract_npr finished")
 
-    url = "https://httpbin.org/get"
+    url = "https://feeds.bbci.co.uk/news/world/rss.xml"
     headers = {
         "User-Agent": "Mozilla/5.0"
     }
