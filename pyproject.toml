@@ -9,9 +9,10 @@ dependencies = [
     "google-generativeai",
     "requests",
     "b2sdk",
-    "pinecone-client",
+    "pinecone",
     "aiohttp",
-    "beautifulsoup4"
+    "beautifulsoup4",
+    "tenacity"
 ]
 
 [project.optional-dependencies]
