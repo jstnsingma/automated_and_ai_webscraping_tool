@@ -3,30 +3,25 @@ from src.helper.gemini_helper import GeminiHelper
 from src.utils.utils import content_hash
 import logging
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
 async def start_scraper(scraper_cls, url, name, context):
-    context.log.info(f"calling scraper: {name}")
-    logger.info(f"Instantiating scraper: {scraper_cls.__name__}")
-
     article_dict = {}
+
     try:
-        article_data = await scraper_cls().main(url, context)
+        article_data = await scraper_cls(context).main(url)
         context.log.info(f"{name}: article_data: {article_data}")
         article_dict['data'] = article_data
         article_dict['name'] = name
         context.log.info(f"{name}: article_dict: {article_dict}")
-        logger.info(f"Done Instantiating: {scraper_cls.__name__}")
 
         return article_dict, name
     
     except Exception as e:
-        logger.exception(f"Scraper error({scraper_cls.__name__}) failed: {e}")
+        context.log.error(f"Scraper error({scraper_cls.__name__}) failed: {e}")
         return None, name
 
 def process_articles(article_data) -> list[dict]:
     processed_articles = []
+
     try:
         llama = LlamaClient()
         gemini = GeminiHelper()
@@ -77,5 +72,5 @@ def process_articles(article_data) -> list[dict]:
         # return processed_articles
     
     except Exception as e:
-        logger.exception(f"Error processing articles: {e}")
+        raise(f"Error processing articles: {e}")
 

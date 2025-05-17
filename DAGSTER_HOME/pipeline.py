@@ -43,7 +43,7 @@ def summarize_and_categorize(article_data):
     return process_articles(article_data['data'])
 
 @op
-def store_articles(article: list[dict]):
+def store_articles(article: list[dict],):
     save_to_db(article)
 
 @graph
@@ -63,4 +63,4 @@ def web_scraper2():
 @job
 def run_all_scrapers():
     web_scraper()
-    # web_scraper2()
+    web_scraper2()

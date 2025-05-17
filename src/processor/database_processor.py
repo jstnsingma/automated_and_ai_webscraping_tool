@@ -9,17 +9,24 @@ logger = logging.getLogger(__name__)
 def process_archiving(article: list[dict]):
     """ Saving json file to b2 bucket """
 
-    bucket_name = "archived-news"
-    helper = B2Helper(bucket_name)
-    helper.upload_file(article['data'], article['name'])
+    try:
+        bucket_name = "archived-news"
+        helper = B2Helper(bucket_name)
+        helper.upload_file(article['data'], article['name'])
+
+    except Exception as e:
+        raise(f"Error deduplicate_data: {e}")
 
 def save_to_db(article: list[dict]):
     """ Saving to pinecone db """
+    try:
+        pc_helper = PineconeHelper()
+        pc_helper.upsert_vectors(article)
 
-    pc_helper = PineconeHelper()
-    pc_helper.upsert_vectors(article)
+    except Exception as e:
+        raise(f"Error deduplicate_data: {e}")
 
-async def deduplicate_data(datas: list[dict], context) -> list[dict]:
+async def deduplicate_data(datas: list[dict]) -> list[dict]:
     """ Filters the data that are already in the DB """
     try: 
         logger.info(f"Processing deduplication")
@@ -35,5 +42,4 @@ async def deduplicate_data(datas: list[dict], context) -> list[dict]:
         return new_data
     
     except Exception as e:
-            logger.exception(f"Error deduplicate_data: {e}")
-            context.log.error(f"Error deduplicate_data: {e}")
+        raise(f"Error deduplicate_data: {e}")

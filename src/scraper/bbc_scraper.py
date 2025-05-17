@@ -11,21 +11,23 @@ logger = logging.getLogger(__name__)
 
 class BBCScraper(BaseScraper):
 
+    def __init__(self, context):
+        super().__init__(context)
+        self.log = context.log
+
     async def fetch_html(self, url: str, session: aiohttp.ClientSession) -> str:
         """Fetch HTML content from the URL"""
 
         try: 
             headers = {"User-Agent": "Mozilla/5.0"}
-            logger.info(f"Fetching HTML content from {url}")
             async with session.get(url, headers=headers) as response:
                 response.raise_for_status() 
                 html_content = await response.text()
-                logger.info(f"Successfully fetched: {url}")
 
                 return html_content
 
         except Exception as e:
-            logger.exception(f"Unexpected error on {url}: {e}")
+            self.log.error(f"Unexpected error on {url}: {e}")
             raise
 
     async def get_article_list(self, content: str) -> list[dict]:
@@ -56,10 +58,10 @@ class BBCScraper(BaseScraper):
             return articles 
         
         except Exception as e:
-            logger.exception(f"Error parsing article list: {e}")
+            self.log.error(f"Error parsing article list: {e}")
             raise
     
-    async def process_all_article(self, articles: list[dict], session: aiohttp.ClientSession, context) -> dict:
+    async def process_all_article(self, articles: list[dict], session: aiohttp.ClientSession) -> dict:
         """Fetch and process the article from the URL"""
         
         all_data = []
@@ -67,7 +69,6 @@ class BBCScraper(BaseScraper):
         for article in articles:
             if not re.search(r'/news/videos/', article['url']):
                 try:
-                    context.log.info(f"processing: {article['url']}")
                     url = article['url']
                     html_content = await self.fetch_html(url, session)
                     soup = BeautifulSoup(html_content, "html.parser")
@@ -96,10 +97,11 @@ class BBCScraper(BaseScraper):
                         })
             
                 except Exception as e:
-                    logger.exception(f"Failed to process article at {article['url']}: {e}")
+                    self.log.error(f"Failed to process article at {article['url']}: {e}")
                     continue
-        context.log.info(f"all_data: {all_data}")
+
+        self.log.info(f"all_data: {all_data}")
         return all_data
 
-    async def main(self, url: str, context):
-        return await self.extract_and_process(url, context)
+    async def main(self, url):
+        return await self.extract_and_process(url)

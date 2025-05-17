@@ -7,6 +7,8 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class BaseScraper(ABC):
+    def __init__(self, context):
+        self.log = context.log
 
     @abstractmethod
     async def fetch_html(self)-> str:
@@ -23,24 +25,25 @@ class BaseScraper(ABC):
         """Return a list of articles metadata"""
         pass
     
-    async def extract_and_process(self, url, context) -> list[dict]:
+    async def extract_and_process(self, url) -> list[dict]:
         """Process the article"""
 
         try:
             async with aiohttp.ClientSession() as session:
-                context.log.info(f"feftching: {url}")
                 html_content = await self.fetch_html(url, session)
 
                 if html_content:
                     articles = await self.get_article_list(html_content)
-                    context.log.info(f"articles: {articles}")
-                    dedupe_article = await deduplicate_data(articles, context)
-                    context.log.info(f"deduplicating: {articles}")
-                    all_data = await self.process_all_article(dedupe_article, session, context)
-                    context.log.info(f"all_data: {all_data}")
+                    self.log.info(f"articles: {articles}")
+                    
+                    dedupe_article = await deduplicate_data(articles)
+                    self.log.info(f"deduplicating: {dedupe_article}")
+
+                    all_data = await self.process_all_article(dedupe_article, session)
+                    self.log.info(f"all_data: {all_data}")
+
                     return all_data
         
         except Exception as e:
-            logger.exception(f"Error processing article content: {e}")
-            context.log.error(f"Error processing article content: {e}")
+            self.log.error(f"Error processing article content: {e}")
             raise
