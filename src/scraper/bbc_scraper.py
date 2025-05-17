@@ -16,8 +16,9 @@ class BBCScraper(BaseScraper):
         """Fetch HTML content from the URL"""
 
         try: 
+            headers = {"User-Agent": "Mozilla/5.0"}
             logger.info(f"Fetching HTML content from {url}")
-            async with session.get(url) as response:
+            async with session.get(url, headers=headers) as response:
                 response.raise_for_status() 
                 html_content = await response.text()
                 logger.info(f"Successfully fetched: {url}")
