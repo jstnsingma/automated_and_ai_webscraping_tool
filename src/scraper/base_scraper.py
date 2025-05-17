@@ -36,7 +36,7 @@ class BaseScraper(ABC):
                     context.log.info(f"articles: {articles}")
                     dedupe_article = await deduplicate_data(articles)
                     all_data = await self.process_all_article(dedupe_article, session)
-
+                    context.log.info(f"all_data: {all_data}")
                     return all_data
         
         except Exception as e:

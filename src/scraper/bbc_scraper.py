@@ -99,9 +99,6 @@ class BBCScraper(BaseScraper):
                     logger.exception(f"Failed to process article at {article['url']}: {e}")
                     continue
         
-        with open("rueters_processed.json", "w") as f:
-            json.dump(all_data, f, indent=4)
-        
         return all_data
 
     async def main(self, url: str, context):

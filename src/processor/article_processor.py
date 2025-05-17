@@ -18,7 +18,7 @@ async def start_scraper(scraper_cls, url, name, context):
         context.log.info(f"{name}: article_data: {article_data}")
         article_dict['data'] = article_data
         article_dict['name'] = name
-
+        context.log.info(f"{name}: article_dict: {article_dict}")
         await asyncio.sleep(2)
         logger.info(f"Done Instantiating: {scraper_cls.__name__}")
 
