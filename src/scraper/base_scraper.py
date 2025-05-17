@@ -35,7 +35,7 @@ class BaseScraper(ABC):
                     articles = await self.get_article_list(html_content)
                     context.log.info(f"articles: {articles}")
                     dedupe_article = await deduplicate_data(articles)
-                    all_data = await self.process_all_article(dedupe_article, session)
+                    all_data = await self.process_all_article(dedupe_article, session, context)
                     context.log.info(f"all_data: {all_data}")
                     return all_data
         

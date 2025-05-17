@@ -60,7 +60,7 @@ class BBCScraper(BaseScraper):
             logger.exception(f"Error parsing article list: {e}")
             raise
     
-    async def process_all_article(self, articles: list[dict], session: aiohttp.ClientSession) -> dict:
+    async def process_all_article(self, articles: list[dict], session: aiohttp.ClientSession, context) -> dict:
         """Fetch and process the article from the URL"""
         
         all_data = []
@@ -68,6 +68,7 @@ class BBCScraper(BaseScraper):
         for article in articles:
             if not re.search(r'/news/videos/', article['url']):
                 try:
+                    context.log.info(f"processing: {article['url']}")
                     url = article['url']
                     html_content = await self.fetch_html(url, session)
                     soup = BeautifulSoup(html_content, "html.parser")
@@ -98,7 +99,7 @@ class BBCScraper(BaseScraper):
                 except Exception as e:
                     logger.exception(f"Failed to process article at {article['url']}: {e}")
                     continue
-        
+        context.log.info(f"all_data: {all_data}")
         return all_data
 
     async def main(self, url: str, context):

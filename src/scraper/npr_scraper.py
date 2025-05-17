@@ -48,13 +48,14 @@ class NPRScraper(BaseScraper):
             logger.exception(f"Error parsing article list: {e}")
             raise
     
-    async def process_all_article(self, articles: list[dict], session: aiohttp.ClientSession) -> dict:
+    async def process_all_article(self, articles: list[dict], session: aiohttp.ClientSession, context) -> dict:
         """Fetch and scraped the article from the URL"""
         
         all_data = []
 
         for article in articles:
             try:
+                context.log.info(f"processing: {article['url']}")
                 url = article['url']
                 html_content = await self.fetch_html(url, session)
                 soup = BeautifulSoup(html_content, "html.parser")
@@ -87,7 +88,7 @@ class NPRScraper(BaseScraper):
             except Exception as e:
                 logger.exception(f"Failed to process article at {article['url']}: {e}")
                 continue
-        
+        context.log.info(f"all_data: {all_data}")
         return all_data
 
     async def main(self, url, context):
