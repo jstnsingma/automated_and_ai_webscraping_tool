@@ -1,4 +1,4 @@
-from pinecone.grpc import PineconeGRPC as Pinecone
+from pinecone import Pinecone
 from typing import List, Dict
 from dotenv import load_dotenv
 import os
