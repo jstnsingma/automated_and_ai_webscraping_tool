@@ -1,4 +1,5 @@
 dagster
+dagster-cloud
 google-generativeai
 requests
 b2sdk
