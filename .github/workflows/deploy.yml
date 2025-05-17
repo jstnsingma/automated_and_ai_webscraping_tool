@@ -15,6 +15,12 @@ env:
   ENABLE_FAST_DEPLOYS: 'true'
   PYTHON_VERSION: '3.10'
   DAGSTER_CLOUD_FILE: 'dagster_cloud.yaml'
+  B2_APP_KEY: ${{ secrets.B2_APP_KEY }}
+  B2_KEY_ID: ${{ secrets.B2_KEY_ID }}
+  PC_API_KEY: ${{ secrets.PC_API_KEY }}
+  PC_HOST: ${{ secrets.PC_HOST }}
+  LLAMA_API: ${{ secrets.LLAMA_API }}
+  LLAMA_URL: ${{ secrets.LLAMA_URL }}
 
 jobs:
   dagster_cloud_default_deploy:
