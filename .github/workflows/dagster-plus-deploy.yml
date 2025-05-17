@@ -19,6 +19,15 @@ env:
   DAGSTER_CLOUD_FILE: 'dagster_cloud.yaml'
   DAGSTER_CLOUD_ORGANIZATION: 'personal-by-justin'
   GITHUB_TOKEN: ${{ secrets.G_TOKEN }}
+  B2_APP_KEY: ${{ secrets.B2_APP_KEY }}
+  B2_KEY_ID: ${{ secrets.B2_KEY_ID }}
+  PC_API_KEY: ${{ secrets.PC_API_KEY }}
+  PC_HOST: ${{ secrets.PC_HOST }}
+  LLAMA_API: ${{ secrets.LLAMA_API }}
+  LLAMA_URL: ${{ secrets.LLAMA_URL }}
+
+  GEMINI_API: "AIzaSyCp_kdcUb5ecp_OJiPPJOAcIJuR3Jc3ST4"
+
 
 jobs:
   dagster_cloud_default_deploy:
