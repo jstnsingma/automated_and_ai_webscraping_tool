@@ -23,15 +23,17 @@ class BaseScraper(ABC):
         """Return a list of articles metadata"""
         pass
     
-    async def extract_and_process(self, url) -> list[dict]:
+    async def extract_and_process(self, url, context) -> list[dict]:
         """Process the article"""
 
         try:
             async with aiohttp.ClientSession() as session:
+                context.log.info(f"feftching: {url}")
                 html_content = await self.fetch_html(url, session)
 
                 if html_content:
                     articles = await self.get_article_list(html_content)
+                    context.log.info(f"articles: {articles}")
                     dedupe_article = await deduplicate_data(articles)
                     all_data = await self.process_all_article(dedupe_article, session)
 

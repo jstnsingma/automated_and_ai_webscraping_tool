@@ -11,27 +11,11 @@ async def extract_bbc(context):
     url = SCRAPER_REGISTRY["bbc"]["url"]
     scraper = SCRAPER_REGISTRY["bbc"]["scraper"]
 
-    result = await start_scraper(scraper, url, name)
+    result = await start_scraper(scraper, url, name, context)
     data, name = result    
 
     context.log.info(f"bbc data: {data}")
     context.log.info("Instantiating extract_npr finished")
-
-
-    url = "https://www.npr.org/get/1001/render/partial/next?start=1&count=50"
-    headers = {
-        "User-Agent": "Mozilla/5.0"
-    }
-
-    try:
-        async with aiohttp.ClientSession(headers=headers) as session:
-            async with session.get(url) as response:
-                context.log.info(f"Status: {response.status}")
-                text = await response.text()
-                context.log.info(f"Response snippet: {text[:200]}")  # Print first 200 chars
-    except Exception as e:
-        context.log.info(f"Request failed: {e}")
-        raise
 
     return data
 
@@ -42,26 +26,11 @@ async def extract_npr(context):
     url = SCRAPER_REGISTRY["npr"]["url"]
     scraper = SCRAPER_REGISTRY["npr"]["scraper"]
 
-    result = await start_scraper(scraper, url, name)
+    result = await start_scraper(scraper, url, name, context)
     data, name = result    
 
     context.log.info(f"npr data: {data}")
     context.log.info("Instantiating extract_npr finished")
-
-    url = "https://feeds.bbci.co.uk/news/world/rss.xml"
-    headers = {
-        "User-Agent": "Mozilla/5.0"
-    }
-
-    try:
-        async with aiohttp.ClientSession(headers=headers) as session:
-            async with session.get(url) as response:
-                context.log.info(f"Status: {response.status}")
-                text = await response.text()
-                context.log.info(f"Response snippet: {text[:200]}")  # Print first 200 chars
-    except Exception as e:
-        context.log.info(f"Request failed: {e}")
-        raise
 
     return data
 

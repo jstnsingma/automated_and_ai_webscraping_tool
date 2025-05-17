@@ -104,5 +104,5 @@ class BBCScraper(BaseScraper):
         
         return all_data
 
-    async def main(self, url: str):
-        return await self.extract_and_process(url)
+    async def main(self, url: str, context):
+        return await self.extract_and_process(url, context)

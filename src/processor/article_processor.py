@@ -8,12 +8,14 @@ import time
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-async def start_scraper(scraper_cls, url, name):
+async def start_scraper(scraper_cls, url, name, context):
+    context.log.info(f"calling scraper: {name}")
     logger.info(f"Instantiating scraper: {scraper_cls.__name__}")
 
     article_dict = {}
     try:
-        article_data = await scraper_cls().main(url)
+        article_data = await scraper_cls().main(url, context)
+        context.log.info(f"{name}: article_data: {article_data}")
         article_dict['data'] = article_data
         article_dict['name'] = name
 

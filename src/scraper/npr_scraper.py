@@ -90,5 +90,5 @@ class NPRScraper(BaseScraper):
         
         return all_data
 
-    async def main(self, url):
-        return await self.extract_and_process(url)
+    async def main(self, url, context):
+        return await self.extract_and_process(url, context)
