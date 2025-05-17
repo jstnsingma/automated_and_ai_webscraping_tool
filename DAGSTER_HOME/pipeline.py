@@ -2,7 +2,6 @@ from dagster import op, DynamicOut, DynamicOutput, Out, job, graph, asset
 from src.scraper.registry import SCRAPER_REGISTRY
 from src.processor.article_processor import start_scraper, process_articles
 from src.processor.database_processor import process_archiving, save_to_db
-import aiohttp
 
 @asset
 async def extract_bbc(context):

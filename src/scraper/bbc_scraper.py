@@ -4,7 +4,6 @@ from datetime import datetime
 from src.utils.utils import custom_serializer
 import logging
 import aiohttp
-import json
 import re
 
 logging.basicConfig(level=logging.INFO)

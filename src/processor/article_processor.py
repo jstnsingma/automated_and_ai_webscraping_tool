@@ -2,8 +2,6 @@ from src.helper.llama_helper import LlamaClient
 from src.helper.gemini_helper import GeminiHelper
 from src.utils.utils import content_hash
 import logging
-import asyncio
-import time
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -19,7 +17,6 @@ async def start_scraper(scraper_cls, url, name, context):
         article_dict['data'] = article_data
         article_dict['name'] = name
         context.log.info(f"{name}: article_dict: {article_dict}")
-        await asyncio.sleep(2)
         logger.info(f"Done Instantiating: {scraper_cls.__name__}")
 
         return article_dict, name
