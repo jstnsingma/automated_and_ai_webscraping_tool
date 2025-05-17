@@ -2,29 +2,33 @@ from dagster import op, DynamicOut, DynamicOutput, Out, job, graph
 from src.scraper.registry import SCRAPER_REGISTRY
 from src.processor.article_processor import start_scraper, process_articles
 from src.processor.database_processor import process_archiving, save_to_db
-import logging
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 @op(out=DynamicOut())
 async def extract_bbc(context):
+    context.log("Instantiating extract_bbc")
     name = SCRAPER_REGISTRY["bbc"]["name"]
     url = SCRAPER_REGISTRY["bbc"]["url"]
     scraper = SCRAPER_REGISTRY["bbc"]["scraper"]
 
     result = await start_scraper(scraper, url, name)
     data, name = result    
+
+    context.log(f"bbc data: {data}")
+
     yield DynamicOutput(data, mapping_key=name)
 
 @op(out=DynamicOut())
 async def extract_npr(context):
+    context.log("Instantiating extract_npr")
     name = SCRAPER_REGISTRY["npr"]["name"]
     url = SCRAPER_REGISTRY["npr"]["url"]
     scraper = SCRAPER_REGISTRY["npr"]["scraper"]
 
     result = await start_scraper(scraper, url, name)
     data, name = result    
+
+    context.log(f"npr data: {data}")
+
     yield DynamicOutput(data, mapping_key=name)
 
 @op(out=Out())
