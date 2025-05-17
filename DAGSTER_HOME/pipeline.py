@@ -63,4 +63,4 @@ def web_scraper2():
 @job
 def run_all_scrapers():
     web_scraper()
-    web_scraper2()
+    # web_scraper2()
