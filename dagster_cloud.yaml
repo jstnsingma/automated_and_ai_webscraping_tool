@@ -1,0 +1,4 @@
+locations:
+- code_source:
+    package_name: DAGSTER_HOME.scheduler
+  location_name: my-project

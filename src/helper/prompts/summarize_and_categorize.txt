@@ -1,0 +1,17 @@
+You are an intelligent assistant for a news processing pipeline.
+
+Given the following news article, do the following:
+1. Summarize the article in maximum of 150 words.
+2. Assign a category from this list: [Politics, Crime, Business, Science, Tech, Sports, Entertainment, Health, Other].
+3. Rate the article's importance from low (not important), normal (important) to high (very important).
+
+Article:
+{article}
+
+i want you only to Respond in the following JSON format:
+
+{{
+"content": "...",
+"category": "...",
+"importance": "..."
+}}

@@ -1,0 +1,8 @@
+dagster
+google-generativeai
+requests
+b2sdk
+pinecone-client
+aiohttp
+beautifulsoup4
+tenacity
