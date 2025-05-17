@@ -5,7 +5,7 @@ from src.processor.database_processor import process_archiving, save_to_db
 
 @op(out=DynamicOut())
 async def extract_bbc(context):
-    context.log("Instantiating extract_bbc")
+    context.log.info("Instantiating extract_bbc")
     name = SCRAPER_REGISTRY["bbc"]["name"]
     url = SCRAPER_REGISTRY["bbc"]["url"]
     scraper = SCRAPER_REGISTRY["bbc"]["scraper"]
@@ -13,13 +13,13 @@ async def extract_bbc(context):
     result = await start_scraper(scraper, url, name)
     data, name = result    
 
-    context.log(f"bbc data: {data}")
-
+    context.log.info(f"bbc data: {data}")
+    context.log.info("Instantiating extract_npr finished")
     yield DynamicOutput(data, mapping_key=name)
 
 @op(out=DynamicOut())
 async def extract_npr(context):
-    context.log("Instantiating extract_npr")
+    context.log.info("Instantiating extract_npr")
     name = SCRAPER_REGISTRY["npr"]["name"]
     url = SCRAPER_REGISTRY["npr"]["url"]
     scraper = SCRAPER_REGISTRY["npr"]["scraper"]
@@ -27,8 +27,8 @@ async def extract_npr(context):
     result = await start_scraper(scraper, url, name)
     data, name = result    
 
-    context.log(f"npr data: {data}")
-
+    context.log.info(f"npr data: {data}")
+    context.log.info("Instantiating extract_npr finished")
     yield DynamicOutput(data, mapping_key=name)
 
 @op(out=Out())
